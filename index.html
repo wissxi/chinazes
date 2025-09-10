@@ -23,6 +23,7 @@
                     <li><a href="#about">О сборке</a></li>
                     <li><a href="#mods">Моды</a></li>
                     <li><a href="#resourcepacks">Ресурспаки</a></li>
+                    <li><a href="#trade-balance">Балансировка торговли</a></li>
                     <li><a href="#installation">Установка</a></li>
                     <li><a href="#server">Сервер</a></li>
                     <li><a href="#download" class="download-btn">Скачать</a></li>
@@ -353,6 +354,183 @@
         </div>
     </section>
 
+    <section id="trade-balance" class="section">
+        <div class="container">
+            <h2>Балансировка торговли</h2>
+            
+            <!-- Предупреждение об экспериментальной функции -->
+            <div class="experimental-warning">
+                <div class="warning-icon">
+                    <i class="fas fa-flask"></i>
+                </div>
+                <div class="warning-content">
+                    <h3>Экспериментальная функция</h3>
+                    <p>Балансировка торговли — это эксперимент для Java Edition и Bedrock Edition, который меняет сделки библиотекаря и странствующего торговца для более честной торговли. Требует включения в настройках мира.</p>
+                </div>
+            </div>
+
+            <!-- Описание изменений -->
+            <div class="trade-info">
+                <div class="trade-description">
+                    <h3><i class="fas fa-balance-scale"></i> Что изменилось?</h3>
+                    <div class="changes-grid">
+                        <div class="change-card">
+                            <i class="fas fa-book"></i>
+                            <h4>Библиотекари</h4>
+                            <p>Теперь продают конкретные зачарованные книги в зависимости от биома деревни. Больше никакой случайности!</p>
+                        </div>
+                        <div class="change-card">
+                            <i class="fas fa-walking"></i>
+                            <h4>Странствующий торговец</h4>
+                            <p>Снижены цены, добавлены новые сделки и возможность продавать ему предметы.</p>
+                        </div>
+                        <div class="change-card">
+                            <i class="fas fa-search"></i>
+                            <h4>Новые возможности</h4>
+                            <p>Особые книги доступны только у мастеров. Некоторые чары убраны из торговли.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Структуры с улучшенным лутом -->
+                <div class="structures-info">
+                    <h3><i class="fas fa-dungeon"></i> Улучшенный лут в структурах</h3>
+                    <div class="structures-grid">
+                        <div class="structure-card">
+                            <i class="fas fa-city"></i>
+                            <h4>Древний город</h4>
+                            <p>Увеличен шанс появления зачарованных книг с <strong>Починкой</strong></p>
+                        </div>
+                        <div class="structure-card">
+                            <i class="fas fa-mountain"></i>
+                            <h4>Пустынный храм</h4>
+                            <p>Больше книг с чарами <strong>Прочность I-III</strong></p>
+                        </div>
+                        <div class="structure-card">
+                            <i class="fas fa-hammer"></i>
+                            <h4>Заброшенная шахта</h4>
+                            <p>Больше книг с чарами <strong>Эффективность I-V</strong></p>
+                        </div>
+                        <div class="structure-card">
+                            <i class="fas fa-shield-alt"></i>
+                            <h4>Аванпост разбойников</h4>
+                            <p>Больше книг с чарами <strong>Быстрая перезарядка I-III</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Таблица биомов и книг -->
+            <div class="biomes-section">
+                <h3><i class="fas fa-book"></i> Какие книги в каких биомах найти?</h3>
+                <p class="biomes-description">Теперь каждый биом специализируется на определённых зачарованиях:</p>
+                
+                <div class="biomes-table-container">
+                    <table class="biomes-table">
+                        <thead>
+                            <tr>
+                                <th>Биом</th>
+                                <th>Особые книги (Мастер)</th>
+                                <th>Обычные книги</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="biome-row desert">
+                                <td class="biome-name">
+                                    <i class="fas fa-sun"></i>
+                                    <strong>Пустыня</strong>
+                                </td>
+                                <td class="special-books">
+                                    Эффективность V, Удача III, Острота V
+                                </td>
+                                <td class="normal-books">
+                                    Огненная защита, Защита от снарядов, Шипы, Верность
+                                </td>
+                            </tr>
+                            <tr class="biome-row plains">
+                                <td class="biome-name">
+                                    <i class="fas fa-seedling"></i>
+                                    <strong>Равнины</strong>
+                                </td>
+                                <td class="special-books">
+                                    Защита IV, Небьющаяся III, Мощь V
+                                </td>
+                                <td class="normal-books">
+                                    Эффективность, Удача, Острота, Защита
+                                </td>
+                            </tr>
+                            <tr class="biome-row savanna">
+                                <td class="biome-name">
+                                    <i class="fas fa-tree"></i>
+                                    <strong>Саванна</strong>
+                                </td>
+                                <td class="special-books">
+                                    Резкость V, Отбрасывание II, Прочность III
+                                </td>
+                                <td class="normal-books">
+                                    Огненная защита, Взрывозащита, Шипы, Быстрая перезарядка
+                                </td>
+                            </tr>
+                            <tr class="biome-row snowy">
+                                <td class="biome-name">
+                                    <i class="fas fa-snowflake"></i>
+                                    <strong>Снежные</strong>
+                                </td>
+                                <td class="special-books">
+                                    Шёлковое касание I, Морозная поступь II, Плавность III
+                                </td>
+                                <td class="normal-books">
+                                    Эффективность, Небьющаяся, Защита от снарядов, Бесконечность
+                                </td>
+                            </tr>
+                            <tr class="biome-row taiga">
+                                <td class="biome-name">
+                                    <i class="fas fa-tree"></i>
+                                    <strong>Тайга</strong>
+                                </td>
+                                <td class="special-books">
+                                    Огненный аспект II, Взрывозащита IV, Мощь V
+                                </td>
+                                <td class="normal-books">
+                                    Острота, Резкость, Отбрасывание, Прочность
+                                </td>
+                            </tr>
+                            <tr class="biome-row jungle">
+                                <td class="biome-name">
+                                    <i class="fas fa-leaf"></i>
+                                    <strong>Джунгли</strong>
+                                </td>
+                                <td class="special-books">
+                                    Небьющаяся III, Быстрая перезарядка III, Бесконечность I
+                                </td>
+                                <td class="normal-books">
+                                    Эффективность, Шёлковое касание, Прочность, Плавность
+                                </td>
+                            </tr>
+                            <tr class="biome-row swamp">
+                                <td class="biome-name">
+                                    <i class="fas fa-frog"></i>
+                                    <strong>Болото</strong>
+                                </td>
+                                <td class="special-books">
+                                    Починка I, Плавность III, Подводное дыхание III
+                                </td>
+                                <td class="normal-books">
+                                    Шёлковое касание, Верность, Морозная поступь, Подводное дыхание
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="biomes-note">
+                    <i class="fas fa-info-circle"></i>
+                    <p><strong>Важно:</strong> Джунглевые и болотные деревни не генерируются естественно. Тебе нужно будет самостоятельно размножить или вылечить деревенских жителей в этих биомах!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="installation" class="section">
         <div class="container">
             <h2>Инструкция для TLauncher</h2>
@@ -543,6 +721,7 @@
                         <li><a href="#about">О сборке</a></li>
                         <li><a href="#mods">Моды</a></li>
                         <li><a href="#resourcepacks">Ресурспаки</a></li>
+                        <li><a href="#trade-balance">Балансировка торговли</a></li>
                         <li><a href="#installation">Установка</a></li>
                         <li><a href="#server">Сервер</a></li>
                         <li><a href="#download">Скачать</a></li>
