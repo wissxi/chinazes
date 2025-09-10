@@ -133,7 +133,7 @@ function initDownloadButtons() {
     
     if (downloadFull) {
         // Прямая ссылка Dropbox - скачивается сразу!
-        downloadFull.href = 'https://www.dropbox.com/scl/fi/u8r4dfqmhn25nxkfirloh/full.zip?rlkey=revqb1tycbwe0guux7p8hmb5a&st=97i4dke5&dl=1';
+        downloadFull.href = 'https://www.dropbox.com/scl/fi/vkvfrs23t75fks7u93rq5/full.zip?rlkey=e9xwjntblcym4qli67ejlid3x&st=nlj7zede&dl=1';
         downloadFull.addEventListener('click', () => {
             showNotification('📦 Скачивание полной сборки началось!', 'success');
         });
@@ -141,7 +141,7 @@ function initDownloadButtons() {
     
     if (downloadMods) {
         // Прямая ссылка Dropbox - скачивается сразу!
-        downloadMods.href = 'https://www.dropbox.com/scl/fi/rg2xrln8nohvm8rl85057/only-mods.zip?rlkey=ts2fi4fjc9ed5rffyzt7i5p7f&st=fvg2cnsu&dl=1';
+        downloadMods.href = 'https://www.dropbox.com/scl/fi/p00jh3n38buj1h42fo73b/only-mods.zip?rlkey=nh6h583bug2eesc6muc3pw5u1&st=oxa76sa2&dl=1';
         downloadMods.addEventListener('click', () => {
             showNotification('🧩 Скачивание модов началось!', 'success');
         });
@@ -149,7 +149,7 @@ function initDownloadButtons() {
     
     if (downloadRP) {
         // Прямая ссылка Dropbox - скачивается сразу!
-        downloadRP.href = 'https://www.dropbox.com/scl/fi/gorksqzg7f57ptrasyyce/only-resourcepacks.zip?rlkey=z4yt8g3lj9944zlpc5kmljt0o&st=worzrhka&dl=1';
+        downloadRP.href = 'https://www.dropbox.com/scl/fi/l3wp9pfw263fsr1bk7i0z/only-resourcepacks.zip?rlkey=pdp8g9k3muq3w520m2ho81q6l&st=6vgcqaml&dl=1';
         downloadRP.addEventListener('click', () => {
             showNotification('🎨 Скачивание ресурспаков началось!', 'success');
         });
