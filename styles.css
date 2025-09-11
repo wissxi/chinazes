@@ -544,10 +544,7 @@ body {
     font-size: 0.95rem;
 }
 
-/* Ресурспаки */
-#resourcepacks {
-    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-}
+/* удалено: отдельная секция ресурспаков перенесена во вкладку */
 
 /* Секция установки */
 #installation {
@@ -1066,16 +1063,11 @@ body {
 }
 
 .server-guide {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    align-items: start;
+    display: block;
 }
 
 .server-info {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+    display: none; /* убираем левую колонку-инфо для фокуса на шагах */
 }
 
 .server-intro {
@@ -1128,10 +1120,10 @@ body {
 }
 
 .server-steps h3 {
-    font-size: 1.8rem;
-    font-weight: 600;
+    font-size: 2rem;
+    font-weight: 700;
     margin-bottom: 2rem;
-    text-align: center;
+    text-align: left;
     color: var(--text-primary);
 }
 
@@ -1141,19 +1133,32 @@ body {
     padding: 1rem;
     margin: 1rem 0;
     border: 1px solid var(--border-color);
+    /* выравниваем по левому краю текста выше */
+    margin-left: 0;
+    display: inline-block; /* чтобы сужался под контент */
+    width: auto;
+    max-width: 250px; /* узкий блок с данными */
+}
+
+@media (max-width: 768px) {
+    .server-credentials {
+        display: block;
+        width: 100%;
+        max-width: none;
+    }
 }
 
 .credential {
     margin: 0.5rem 0;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem; /* ближе значение к подписи */
     flex-wrap: nowrap;
 }
 
 .credential strong {
     color: var(--secondary-color);
-    min-width: 120px;
+    min-width: 100px; /* чуть меньше ширина подписи */
     flex-shrink: 0;
 }
 
@@ -1323,42 +1328,64 @@ body {
 }
 
 .steps {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    position: relative;
+    padding-left: 2.75rem;
+}
+
+.steps::before {
+    content: '';
+    position: absolute;
+    left: 1rem; /* чуть левее линия таймлайна */
+    top: 0.5rem;
+    bottom: 0.5rem;
+    width: 2px;
+    background: linear-gradient(180deg, rgba(79,70,229,0.6), rgba(124,58,237,0.2));
 }
 
 .step {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: start;
+    gap: 0.75rem 1rem;
+    background: rgba(30, 41, 59, 0.45);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 1rem 1rem 1rem 1rem;
 }
 
 .step-number {
-    width: 40px;
-    height: 40px;
-    background: var(--gradient-primary);
+    width: 34px;
+    height: 34px;
+    background: var(--gradient-secondary);
     color: white;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 600;
-    font-size: 1.1rem;
+    font-size: 1rem;
     flex-shrink: 0;
+    position: absolute;
+    left: -2.8rem; /* чуть левее круг с номером */
+    top: 1.5rem; /* чуть ниже по вертикали */
+    box-shadow: 0 6px 20px rgba(79,70,229,0.25);
 }
 
 .step-content h4 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
     color: var(--text-primary);
 }
 
 .step-content p {
     color: var(--text-secondary);
-    font-size: 0.9rem;
-    line-height: 1.5;
+    font-size: 0.95rem;
+    line-height: 1.6;
 }
 
 .step-content code {
