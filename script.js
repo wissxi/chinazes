@@ -132,7 +132,7 @@ function initDownloadButtons() {
     
     if (downloadFull) {
         // Прямая ссылка Dropbox - скачивается сразу!
-        downloadFull.href = 'https://www.dropbox.com/scl/fi/0p2p5eo6d2voj2bbz46ga/full.zip?rlkey=595fn8iqqfo2n3qzpqviqwtt1&st=o24lruoz&dl=0';
+        downloadFull.href = 'https://www.dropbox.com/scl/fi/0p2p5eo6d2voj2bbz46ga/full.zip?rlkey=595fn8iqqfo2n3qzpqviqwtt1&st=o24lruoz&dl=1';
         downloadFull.addEventListener('click', () => {
             showNotification('📦 Скачивание полной сборки началось!', 'success');
         });
@@ -721,3 +721,4 @@ if (!window.IntersectionObserver) {
         el.classList.add('animate-in');
     });
 }
+
