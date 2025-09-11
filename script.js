@@ -126,32 +126,23 @@ function initScrollAnimations() {
 
 // Кнопки скачивания
 function initDownloadButtons() {
-    // Устанавливаем ссылки на Google Drive файлы
+    // Устанавливаем ссылки на файлы
     const downloadFull = document.getElementById('downloadFull');
-    const downloadMods = document.getElementById('downloadMods');
-    const downloadRP = document.getElementById('downloadRP');
+    const downloadShader = document.getElementById('downloadShader');
     
     if (downloadFull) {
         // Прямая ссылка Dropbox - скачивается сразу!
-        downloadFull.href = 'https://www.dropbox.com/scl/fi/vkvfrs23t75fks7u93rq5/full.zip?rlkey=e9xwjntblcym4qli67ejlid3x&st=nlj7zede&dl=1';
+        downloadFull.href = 'https://www.dropbox.com/scl/fi/0p2p5eo6d2voj2bbz46ga/full.zip?rlkey=595fn8iqqfo2n3qzpqviqwtt1&st=o24lruoz&dl=0';
         downloadFull.addEventListener('click', () => {
             showNotification('📦 Скачивание полной сборки началось!', 'success');
         });
     }
     
-    if (downloadMods) {
-        // Прямая ссылка Dropbox - скачивается сразу!
-        downloadMods.href = 'https://www.dropbox.com/scl/fi/p00jh3n38buj1h42fo73b/only-mods.zip?rlkey=nh6h583bug2eesc6muc3pw5u1&st=oxa76sa2&dl=1';
-        downloadMods.addEventListener('click', () => {
-            showNotification('🧩 Скачивание модов началось!', 'success');
-        });
-    }
-    
-    if (downloadRP) {
-        // Прямая ссылка Dropbox - скачивается сразу!
-        downloadRP.href = 'https://www.dropbox.com/scl/fi/l3wp9pfw263fsr1bk7i0z/only-resourcepacks.zip?rlkey=pdp8g9k3muq3w520m2ho81q6l&st=6vgcqaml&dl=1';
-        downloadRP.addEventListener('click', () => {
-            showNotification('🎨 Скачивание ресурспаков началось!', 'success');
+    if (downloadShader) {
+        // Прямая ссылка на рекомендуемый шейдер-пак (пример)
+        downloadShader.href = 'https://www.dropbox.com/scl/fi/8m8phlb9py04buow0piiz/BSL-Shader.zip?rlkey=k5ctboyquhr4lphrzyhwnguxk&st=5miahx5j&dl=1';
+        downloadShader.addEventListener('click', () => {
+            showNotification('✨ Скачивание шейдера началось!', 'success');
         });
     }
 }
@@ -224,14 +215,16 @@ function initBlocksHoverEffect() {
 // Обработчики для блоков
 function blockHoverHandler(e) {
     const block = e.target;
-    block.style.transform = 'scale(1.1) rotate(5deg)';
-    block.style.animation = 'pulse 1s ease-in-out infinite';
+    const currentOffset = parseFloat(block.dataset.scrollOffset || '0');
+    block.style.transform = `translateY(${currentOffset}px) scale(1.08)`;
+    block.style.transition = 'transform 0.2s ease';
 }
 
 function blockLeaveHandler(e) {
     const block = e.target;
-    block.style.transform = '';
-    block.style.animation = 'pulse 3s ease-in-out infinite';
+    const currentOffset = parseFloat(block.dataset.scrollOffset || '0');
+    block.style.transform = `translateY(${currentOffset}px)`;
+    block.style.transition = 'transform 0.3s ease';
 }
 
 // Функция для карточек
@@ -462,7 +455,8 @@ function updateModCounts() {
         visual: document.querySelectorAll('.mod-category[data-category="visual"] .mod-card').length,
         optimization: document.querySelectorAll('.mod-category[data-category="optimization"] .mod-card').length,
         content: document.querySelectorAll('.mod-category[data-category="content"] .mod-card').length,
-        utility: document.querySelectorAll('.mod-category[data-category="utility"] .mod-card').length
+        utility: document.querySelectorAll('.mod-category[data-category="utility"] .mod-card').length,
+        resourcepacks: document.querySelectorAll('.mod-category[data-category="resourcepacks"] .mod-card').length
     };
     
     // Обновляем счетчики в кнопках табов
@@ -538,151 +532,61 @@ initBlocksScrollAnimation();
 // Анимация блоков при скролле
 function initBlocksScrollAnimation() {
     const blocks = document.querySelectorAll('.block');
-    let lastScrollY = window.scrollY;
-    let isScrolling = false;
-    let scrollAnimationFrameId;
-    
-    // Для каждого блока создаем уникальные параметры движения
-    const blockData = [];
-    blocks.forEach((block, index) => {
-        blockData.push({
-            element: block,
-            originalTransform: window.getComputedStyle(block).transform,
-            amplitude: 15 + Math.random() * 25, // Амплитуда движения 15-40px
-            frequency: 0.8 + Math.random() * 0.4, // Частота 0.8-1.2
-            phase: Math.random() * Math.PI * 2, // Случайная фаза
-            direction: Math.random() > 0.5 ? 1 : -1, // Случайное направление
-            baseY: 0,
-            isHovered: false,
-            isLeaving: false,
-            hoverStartY: 0,
-            hoverStartX: 0
-        });
-    });
-    
-    function updateBlocksPosition() {
+    const hero = document.querySelector('.hero');
+    if (!hero || !blocks.length) return;
+
+    const maxOffset = 160; // Максимальное смещение вниз в px
+    const sensitivity = 0.35; // Чувствительность к скроллу
+
+    function clamp(value, min, max) {
+        return Math.max(min, Math.min(max, value));
+    }
+
+    function computeOffset() {
+        const heroTop = hero.offsetTop;
         const currentScrollY = window.scrollY;
-        const scrollDelta = currentScrollY - lastScrollY;
-        
-        blockData.forEach((data, index) => {
-            if (!data.isHovered && !data.isLeaving) { // Не анимируем если блок под hover или выходит из него
-                // НОВЫЙ ПОДХОД: используем текущую позицию скролла напрямую, БЕЗ накопления
-                const scrollMultiplier = 0.15; // Уменьшили чувствительность
-                const maxOffset = 40; // Уменьшили максимальное смещение
-                
-                // Рассчитываем смещение на основе ТЕКУЩЕЙ позиции скролла
-                let scrollBasedY = (currentScrollY * scrollMultiplier * data.direction) % (maxOffset * 2);
-                if (scrollBasedY > maxOffset) scrollBasedY = maxOffset * 2 - scrollBasedY;
-                if (scrollBasedY < -maxOffset) scrollBasedY = -maxOffset * 2 - scrollBasedY;
-                
-                // Небольшое хаотичное покачивание для каждого блока
-                const time = Date.now() * 0.001;
-                const randomFloat = Math.sin(time * data.frequency + data.phase) * 6; // Уменьшили амплитуду
-                const randomX = Math.sin(time * data.frequency * 0.7 + data.phase) * 4; // Уменьшили боковое движение
-                
-                const totalY = scrollBasedY + randomFloat;
-                const totalX = randomX;
-                
-                // Обновляем baseY для использования в hover (но НЕ накапливаем!)
-                data.baseY = scrollBasedY;
-                
-                // Применяем трансформацию только если блок не в hover состоянии
-                data.element.style.transform = `translate(${totalX}px, ${totalY}px)`;
+        const raw = (currentScrollY - heroTop) * sensitivity;
+        const offset = clamp(raw, 0, maxOffset);
+        return offset;
+    }
+
+    function applyOffset(offset) {
+        blocks.forEach((block) => {
+            block.dataset.scrollOffset = String(offset);
+            // Сохраняем масштаб при hover, но обновляем translateY
+            const isHovered = block.matches(':hover');
+            // Во время скролла убираем transition, чтобы не было рассинхрона
+            block.style.transition = 'transform 0s';
+            if (isHovered) {
+                block.style.transform = `translateY(${offset}px) scale(1.08)`;
+            } else {
+                block.style.transform = `translateY(${offset}px)`;
             }
         });
-        
-        lastScrollY = currentScrollY;
-        isScrolling = false;
     }
-    
-    // Обработчик скролла с throttling
-    window.addEventListener('scroll', () => {
-        if (!isScrolling) {
-            isScrolling = true;
-            scrollAnimationFrameId = requestAnimationFrame(updateBlocksPosition);
-        }
-    });
-    
-    // Лёгкая постоянная анимация только для хаотичного покачивания
-    function continuousAnimation() {
-        if (!isScrolling) {
-            const time = Date.now() * 0.001;
-            const currentScrollY = window.scrollY;
-            
-            blockData.forEach((data, index) => {
-                if (!data.isHovered && !data.isLeaving) {
-                    // Используем тот же подход без накопления
-                    const scrollMultiplier = 0.15;
-                    const maxOffset = 40;
-                    
-                    let scrollBasedY = (currentScrollY * scrollMultiplier * data.direction) % (maxOffset * 2);
-                    if (scrollBasedY > maxOffset) scrollBasedY = maxOffset * 2 - scrollBasedY;
-                    if (scrollBasedY < -maxOffset) scrollBasedY = -maxOffset * 2 - scrollBasedY;
-                    
-                    const randomFloat = Math.sin(time * data.frequency + data.phase) * 6;
-                    const randomX = Math.sin(time * data.frequency * 0.7 + data.phase) * 4;
-                    
-                    const totalY = scrollBasedY + randomFloat;
-                    const totalX = randomX;
-                    
-                    // Обновляем baseY для hover
-                    data.baseY = scrollBasedY;
-                    
-                    // Применяем анимацию только если блок не в hover
-                    data.element.style.transform = `translate(${totalX}px, ${totalY}px)`;
-                }
+
+    let ticking = false;
+    function onScroll() {
+        if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(() => {
+                const offset = computeOffset();
+                applyOffset(offset);
+                // После кадра возвращаем плавность
+                setTimeout(() => {
+                    blocks.forEach(block => {
+                        block.style.transition = '';
+                    });
+                }, 0);
+                ticking = false;
             });
         }
-        requestAnimationFrame(continuousAnimation);
     }
-    continuousAnimation();
-    
-    // Отслеживаем hover состояние блоков
-    blocks.forEach((block, index) => {
-        const data = blockData[index];
-        
-        block.addEventListener('mouseenter', () => {
-            data.isHovered = true;
-            data.isLeaving = false; // Сбрасываем флаг если снова навели
-            
-            // Запоминаем текущую позицию для плавного hover
-            data.hoverStartY = data.baseY;
-            data.hoverStartX = Math.sin(Date.now() * 0.001 * data.frequency * 0.7 + data.phase) * 5;
-            
-            // Применяем hover эффект БЕЗ резкого смещения - остаёмся на текущем месте
-            block.style.transform = `translate(${data.hoverStartX}px, ${data.hoverStartY}px) scale(1.1) rotate(5deg)`;
-            block.style.transition = 'transform 0.3s ease';
-        });
-        
-        block.addEventListener('mouseleave', () => {
-            // Сохраняем информацию о том, что блок выходит из hover
-            data.isLeaving = true;
-            
-            // Возвращаемся к текущей позиции скролла БЕЗ дополнительного смещения
-            const returnY = data.baseY + Math.sin(Date.now() * 0.001 * data.frequency + data.phase) * 8;
-            const returnX = Math.sin(Date.now() * 0.001 * data.frequency * 0.7 + data.phase) * 5;
-            
-            // Плавно убираем scale и rotate, возвращаясь к актуальной позиции
-            block.style.transform = `translate(${returnX}px, ${returnY}px)`;
-            block.style.transition = 'transform 0.6s ease-out';
-            
-            // Постепенно возвращаем к анимации скролла
-            setTimeout(() => {
-                data.isHovered = false;
-                
-                // Ещё немного ждём перед полным возвратом к анимации
-                setTimeout(() => {
-                    data.isLeaving = false;
-                    block.style.transition = 'transform 0.3s ease-out'; // Оставляем лёгкий transition
-                    
-                    // И через ещё немного убираем его совсем
-                    setTimeout(() => {
-                        block.style.transition = '';
-                    }, 300);
-                }, 200);
-            }, 100);
-        });
-    });
+
+    // Инициализация и события
+    applyOffset(computeOffset());
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', () => applyOffset(computeOffset()));
 }
 
 // Обработка ошибок и фоллбэки
